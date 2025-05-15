@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>возведение в степень</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css"
+    /> <!-- добавляем стили mocha для отображения результатов -->
+    <!-- добавляем фреймворк mocha -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
+    <script>
+        mocha.setup("bdd"); // включаем режим тестирования в стиле BDD
+    </script>
+    <!-- добавляем chai (предоставляет большое количество функций) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
+    <script>
+        let assert = chai.assert; // объявляем assert глобально
+    </script>
+</head>
+<body>
+    <script>
+        function pow(x, n) {
+            if (n < 0) return NaN;
+            if (Math.round(n) != n) return NaN;
+            let result = 1;
+            for (let i = 0; i < n; i++) result *= x;
+            return result;
+        }
+    </script>
+    <script src="./test.js"></script> <!-- скрипт со спецификацией -->
+    <div id="mocha"></div> <!-- результаты тестов -->
+    <script>
+        mocha.run();
+    </script> <!-- запуск тестов -->
+</body>
+</html>

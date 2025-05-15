@@ -1,0 +1,383 @@
+// кофеварка v1.0
+// capacity - ёмкость кофеварки
+class CoffeeMachine {
+    constructor(power, capacity) {
+        let waterAmount = 0;
+        let timerId;
+        this.isRunning = function() {return !!timerId};
+        const WATER_HEAT_CAPACITY = 4200;
+        function getTimeToBoil() {
+            return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+        };
+        this.setWaterAmount = function(amount) {
+            if (amount < 0) { throw new Error('Значение должно быть положительным'); };
+            if (amount > capacity) { throw new Error('Нельзя залить воды больше, чем ' + capacity); };
+            waterAmount = amount;
+        }; // сеттер количества воды
+        this.getWaterAmount = function() {return waterAmount}; // геттер количества воды
+        this.waterAmount = function(amount) {
+            if (!arguments.length) {return waterAmount}; // вызов без параметра, => геттер, возвращаем свойство
+            // иначе режим сеттера
+            if (amount < 0) { throw new Error('Значение должно быть положительным'); };
+            if (amount > capacity) { throw new Error('Нельзя залить воды больше, чем ' + capacity); };
+            waterAmount = amount;
+        }; // единый геттер-сеттер количества воды
+        this.getPower = function() {return power}; // геттер мощности
+        this.addWater = function(amount) {
+            this.setWaterAmount(waterAmount + amount);
+        }; // добавление воды
+        function onReady() {console.log('Кофе готов: ' + waterAmount + ' мл')}; // вывод результата
+        this.setOnReady = function(newOnReady) {onReady = newOnReady}; // сеттер чтобы код снаружи мог назначить свой onReady
+        this.run = function() {
+            timerId = setTimeout(function () {
+                timerId = null;
+                onReady();
+            }, getTimeToBoil());
+        }; // запуск
+    }
+} 
+// Чтобы setOnReady можно было вызывать в любое время, в setTimeout передаётся не onReady, а анонимная функция function() { onReady() }, которая возьмёт текущий (установленный последним) onReady из замыкания.
+
+var coffeeMachine = new CoffeeMachine(1000, 500);
+// coffeeMachine.setWaterAmount(600); // Uncaught Error: Нельзя залить воды больше, чем 500
+coffeeMachine.setWaterAmount(450);
+console.log(coffeeMachine.getWaterAmount()); // 450
+coffeeMachine.waterAmount(50);
+console.log(coffeeMachine.waterAmount()); // 50
+coffeeMachine.setOnReady(function() {
+    let amount = coffeeMachine.getWaterAmount();
+    console.log('Готов кофе: ' + amount + ' мл');
+});
+coffeeMachine.run(); // => ~ через 1 мин в консоли: Готов кофе: 50 мл
+
+console.log('До: ' + coffeeMachine.isRunning()); // До: false
+coffeeMachine.run();
+console.log('В процессе: ' + coffeeMachine.isRunning()); // В процессе: true
+coffeeMachine.setOnReady(function() {
+    let amount = coffeeMachine.getWaterAmount();
+    console.log('Кофе готов: ' + amount + ' мл'); // Кофе готов: 50 мл
+    console.log('После: ' + coffeeMachine.isRunning()); // После: false
+});
+
+
+
+счётчик из 3legant:
+	<div class="promotion-timer">
+		<div class="timer">
+			<div class="timer-el">
+				<div class="timer-value" id="days"></div>
+				<div class="timer-desc">Days</div>
+			</div>
+			<div class="timer-el">
+				<div class="timer-value" id="hours"></div>
+				<div class="timer-desc">Hours</div>
+			</div>
+			<div class="timer-el">
+				<div class="timer-value" id="minutes"></div>
+				<div class="timer-desc">Minutes</div>
+			</div>
+			<div class="timer-el">
+				<div class="timer-value" id="seconds"></div>
+				<div class="timer-desc">Seconds</div>
+			</div>
+		</div>
+	</div>
+function timer(){
+    const endDate = new Date();
+    // const endDate = new Date('Mar 18, 2024, 17:17:00');
+    endDate.setDate(endDate.getDate() + 3);
+    const daysEl = document.querySelector('#days');
+    const hoursEl = document.querySelector('#hours');
+    const minutesEl = document.querySelector('#minutes');
+    const secondsEl = document.querySelector('#seconds');
+    let timerInterval;
+    function updateTimer(){
+        const now = new Date();
+        const timeDiff = endDate - now;
+        if (timeDiff <= 0) {
+            daysEl.innerText = '0';
+            hoursEl.innerText = '0';
+            minutesEl.innerText = '0';
+            secondsEl.innerText = '0';
+            clearInterval(timerInterval);
+            return;
+        }
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        daysEl.innerText = days < 10 ? '0' + days : days;
+        hoursEl.innerText = hours < 10 ? '0' + hours : hours;
+        minutesEl.innerText = minutes < 10 ? '0' + minutes : minutes;
+        secondsEl.innerText = seconds < 10 ? '0' + seconds : seconds;
+    }
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+}
+export default timer;
+
+
+
+// v2.0
+js\coffee.js:
+// кофеварка
+// power - мощность, capacity - ёмкость кофеварки
+class CoffeeMachine {
+    constructor(power, capacity) {
+        let waterAmount = 0;
+        const water_heat_capacity = 4200;
+        let timerId;
+        this.isRunning = function() {return !!timerId};
+        this.power = power;
+        this.capacity = capacity;
+        this.getWaterAmount = function() {return waterAmount}; // геттер количества воды
+        this.setWaterAmount = function(amount) { // сеттер количества воды
+            if (amount < 0) {throw new Error('Значение должно быть положительным')};
+            if (amount > capacity) {throw new Error('Нельзя залить воды больше, чем ' + capacity)};
+            waterAmount = amount;
+        };
+        this.getPower = function() {return power}; // геттер мощности
+        this.addWater = function(amount) {this.setWaterAmount(waterAmount + amount)}; // добавление воды
+        this.setOnReady = function(newOnReady) {onReady = newOnReady}; // сеттер чтобы код снаружи мог назначить свой onReady
+        this.getTime = function(){
+            let time = waterAmount * water_heat_capacity * 80 / power;
+            const timeValue = document.querySelector('#timeValue');
+            timeValue.innerText = Math.round(time/1000) + ' сек.';
+            return time;
+        };
+        this.getState = function(){
+            const processValue = document.querySelector('#processValue');
+            processValue.innerText = this.isRunning();
+            console.log(this.isRunning());
+        }
+        function getTimeToBoil() {
+            return waterAmount * water_heat_capacity * 80 / power;
+        };
+        function onReady() {
+            console.log('Кофе готов: ' + waterAmount + ' мл');
+            let result = `Кофе готов: ${waterAmount} мл`;
+            const resultDiv = document.querySelector('.coffee-result');
+            resultDiv.innerText = result;
+            // const processValue = document.querySelector('#processValue');
+            processValue.innerText = false;
+            return result;
+        }; // вывод результата
+        this.run = function () { // запуск
+            timerId = setTimeout(function () {
+                timerId = null;
+                onReady();
+            }, getTimeToBoil());
+        };
+    }
+};
+
+let power = 500;
+let capacity = 1000;
+
+const powerInput = document.querySelector('#powerInput');
+const powerValue = document.querySelector('#powerValue');
+const powerForm = document.querySelector('.coffee-power-input');
+powerForm.onsubmit = function(e){
+    e.preventDefault();
+    power = parseInt(powerInput.value);
+    // тут нужны проверки
+    powerValue.textContent = power;
+}
+function powerFormEvent(value){
+    power = parseInt(powerInput.value);
+    // тут нужны проверки
+    powerValue.textContent = power;
+}
+
+const capacityInput = document.querySelector('#capacityInput');
+const capacityValue = document.querySelector('#capacityValue');
+const capacityForm = document.querySelector('.coffee-capacity-input');
+capacityForm.onsubmit = function(e){
+    e.preventDefault();
+    capacity = parseInt(capacityInput.value);
+    // тут нужны проверки
+    capacityValue.textContent = capacity;
+}
+function capacityFormEvent(value){
+    capacity = parseInt(capacityInput.value);
+    // тут нужны проверки
+    capacityValue.textContent = capacity;
+}
+
+const createBtn = document.querySelector('#createBtn');
+function create(){
+    let coffeeMachine = new CoffeeMachine(power, capacity);
+    const inputs = document.querySelector('.coffee-data-inputs');
+    inputs.innerText = `создана кофеварка с объёмом ${capacity} мл, и мощностью ${power} W.`;
+    
+    let water = 100;
+    coffeeMachine.setWaterAmount(water);
+    const waterInput = document.querySelector('#waterInput');
+    const waterValue = document.querySelector('#waterValue');
+    // const waterBtn = document.querySelector('#waterBtn');
+    const waterForm = document.querySelector('.coffee-volume-input');
+    waterForm.onsubmit = function(e){
+        e.preventDefault();
+        let waterAmount = parseInt(waterInput.value);
+        water = water + waterAmount;
+        // тут нужны проверки
+        waterValue.textContent = water;
+        coffeeMachine.setWaterAmount(water);
+    }
+    coffeeMachine.getState();
+    const runBtn = document.querySelector('#runBtn');
+    runBtn.onclick = function(){
+        coffeeMachine.getTime();
+        let time = coffeeMachine.getTime();
+        timer(time);
+        coffeeMachine.run();
+        coffeeMachine.getState();
+    };
+};
+
+// let coffeeMachine = new CoffeeMachine(power, water);
+// coffeeMachine.setWaterAmount(450);
+// console.log(coffeeMachine.getWaterAmount()); // 450
+
+// console.log('До: ' + coffeeMachine.isRunning()); // До: false
+// // coffeeMachine.run();
+// console.log('В процессе: ' + coffeeMachine.isRunning()); // В процессе: true
+// coffeeMachine.setOnReady(function() {
+//     let amount = coffeeMachine.getWaterAmount();
+//     console.log('Кофе готов: ' + amount + ' мл'); // Кофе готов: 50 мл
+//     console.log('После: ' + coffeeMachine.isRunning()); // После: false
+// });
+
+// timer
+function timer(time){
+    let t = time;
+    const minElem = document.querySelector('#min');
+    const secElem = document.querySelector('#sec');
+    function updtimer(){
+        t = t-1000;
+        const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((t % (1000 * 60)) / 1000);
+        // console.log(minutes, ':', seconds);
+        minElem.innerText = minutes < 10 ? '0' + minutes : minutes;
+        secElem.innerText = seconds < 10 ? '0' + seconds : seconds;
+    }
+    let timer1 = setInterval(updtimer, 1000);
+    setTimeout(() => {clearInterval(timer1)}, time);
+};
+
+
+index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ JS</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header class="header">
+        <h3>JS-project-0</h3>
+    </header>
+    <section class="coffee">
+        <div class="coffee-container">
+            <div class="coffee-img">
+                <img src="./img/coffee.jpg" alt="Coffee Machine">
+            </div>
+            <div class="coffee-desc">
+                <div class="coffee-title">Кофеварка</div>
+                <div class="title coffee-data-inputs">
+                    <div class="coffee-power">
+                        <div class="title coffee-power-title">мощность: <span id="powerValue">500</span> W</div>
+                        <form class="coffee-power-input">
+                            <input name="power" id="powerInput" type="text" placeholder="W"  onchange="powerFormEvent(this.value)" value="500" />
+                            <button class="btn" id="powerBtn" type="submit">задать</button>
+                        </form>
+                    </div>
+                    <div class="coffee-capacity">
+                        <div class="title coffee-capacity-title">ёмкость: <span id="capacityValue">1000</span> мл</div>
+                        <form class="coffee-capacity-input">
+                            <input name="capacity" id="capacityInput" type="text" placeholder="мл" onchange="capacityFormEvent(this.value)" value="1000" />
+                            <button class="btn" id="capacityBtn">задать</button>
+                        </form>
+                    </div>
+                    <button class="btn" id="createBtn" onclick="create();">создать кофеварку</button>
+                </div>
+                <div class="coffee-dataset">
+                    <div class="coffee-volume">
+                        <div class="title coffee-volume-title">объем: <span id="waterValue">100</span> мл</div>
+                        <form class="coffee-volume-input">
+                            <input name="volume" id="waterInput" type="text" placeholder="мл" value="100" />
+                            <button class="btn" id="waterBtn">добавить</button>
+                        </form>
+                    </div>
+                    <!-- <div class="coffee-addwater">
+                        <div class="coffee-addwater-title">добавить воды: <span id="addwaterValue">100</span> мл </div>
+                        <form class="coffee-addwater-input">
+                            <input name="addwater" id="addwaterInput" type="text" placeholder="мл" onchange="addwaterFormEvent(this.value)" />
+                            <button class="btn" id="addwaterBtn">добавить</button>
+                        </form>
+                    </div> -->
+                    <button class="btn" id="runBtn">заварить</button>
+                </div>
+                <div class="coffee-process">
+                    <div class="title coffee-process-time">
+                        <p>оценочное время ожидания: </p>
+                        <span id="timeValue"></span>
+                        <div class="timer">
+                            <div class="timer-min" id="min">00</div>
+                            <p> : </p>
+                            <div class="timer-sec" id="sec">00</div>
+                        </div>
+                    </div>
+                    <div class="title coffee-process-status">в процессе: 
+                        <span id="processValue"></span>
+                    </div>
+                </div>
+                <div class="title coffee-result"></div>
+            </div>
+        </div>
+    </section><hr>
+    <script src="./js/coffee.js"></script>
+</body>
+</html>
+
+scss\main.scss:
+body {font-family: sans-serif;}
+.none {display: none;}
+.btn {padding: 4px 12px; border: 2px solid #628f71; border-radius: 16px; font-size: 16px; background-color: #628f71; color: #fff; transition: all .3s ease-in-out; 
+	&:hover {opacity: .7;}
+	&:active {background-color: #fff; color: #628f71; }
+}
+input {padding: 4px 12px; width: 60px; border: 1px solid #333; border-radius: 14px; font-size: 16px; background-color: #fff;}
+.title {padding: 6px; font-size: 16px; background-color: #fff;}
+// .coffee {}
+.coffee-container {display: flex; gap: 10px; padding: 10px; 
+	@media (max-width: 680px) {flex-direction: column; justify-content: center; align-items: center; }
+}
+// .coffee-img {}
+.coffee-desc {display: flex; width: 100%; max-width: 600px; flex-direction: column; gap: 30px; 
+	@media (max-width: 400px) {gap: 10px;}
+}
+.coffee-title {font-weight: 600; font-size: 24px;}
+.coffee-data-inputs {display: flex; flex-direction: column; gap: 10px;}
+.coffee-power {display: flex; justify-content: space-between; 
+	@media (max-width: 400px) {flex-direction: column; align-items: center; }
+}
+.coffee-capacity {display: flex; justify-content: space-between; 
+	@media (max-width: 400px) {flex-direction: column; align-items: center; }
+}
+.coffee-volume {display: flex; justify-content: space-between; 
+	@media (max-width: 400px) {flex-direction: column; align-items: center; }
+}
+.coffee-addwater {display: flex; justify-content: space-between;}
+.coffee-volume-title {margin-right: 30px;}
+.coffee-dataset {display: flex; flex-direction: column; gap: 10px;}
+// .coffee-process {}
+.coffee-process-time {display: flex; gap: 10px; align-items: center; justify-content: space-between; 
+	@media (max-width: 400px) {flex-direction: column; align-items: center; }
+}
+// .coffee-result {}
+.timer {display: flex; align-items: center; gap: 1px; font-size: 30px; font-weight: 600;}
+
+

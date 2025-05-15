@@ -1,0 +1,22 @@
+.circle-w {
+    position: relative;
+    height: 250px;
+}
+.circle-btn {
+    padding: 3px 20px;
+    font-size: 14px;
+    border-radius: 14px;
+}
+.message-ball {
+    font-size: 24px;
+    line-height: 200px;
+    text-align: center;
+}
+.circle {
+    position: absolute;
+    transition-property: width, height;
+    transition-duration: 2s;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #9ac7bd;
+    border-radius: 50%;
+}

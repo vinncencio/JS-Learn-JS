@@ -1,0 +1,23 @@
+.timer-main {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 0 auto;
+    width: 300px;
+    align-items: center;
+    border: 1px solid rgb(102, 186, 102);
+    border-radius: 10px;
+}
+.timer-clock {
+    margin-bottom: 10px;
+    font-size: 3rem;
+}
+.timer-btns {
+    display: flex;
+    gap: 10px;
+}
+.timer-btn {
+    padding: 6px 36px;
+    font-size: 24px;
+    font-weight: 500;
+}

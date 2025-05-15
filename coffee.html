@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ JS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header class="header">
+        <h3 class="logo">JS0</h3>
+    </header><hr>
+    <section class="coffee">
+        <div class="coffee-container">
+            <div class="coffee-img">
+                <img src="./img/coffee.jpg" alt="Coffee Machine">
+            </div>
+            <div class="coffee-desc">
+                <div class="coffee-title">Кофеварка</div>
+                <div class="error none"></div>
+                <div class="title coffee-data-inputs">
+                    <div class="coffee-power">
+                        <div class="title coffee-power-title">мощность: <span id="powerValue">500</span> W</div>
+                        <form class="coffee-power-input">
+                            <input name="power" id="powerInput" type="text" placeholder="W"  value="500" />
+                            <!-- <input name="power" id="powerInput" type="text" placeholder="W"  onchange="powerFormEvent(this.value)" value="500" /> -->
+                            <button class="btn" id="powerBtn" type="submit">задать</button>
+                        </form>
+                    </div>
+                    <div class="coffee-capacity">
+                        <div class="title coffee-capacity-title">ёмкость: <span id="capacityValue">1000</span> мл</div>
+                        <form class="coffee-capacity-input">
+                            <input name="capacity" id="capacityInput" type="text" placeholder="мл" value="1000" />
+                            <!-- <input name="capacity" id="capacityInput" type="text" placeholder="мл" onchange="capacityFormEvent(this.value)" value="1000" /> -->
+                            <button class="btn" id="capacityBtn">задать</button>
+                        </form>
+                    </div>
+                    <button class="btn" id="createBtn" onclick="create();">создать кофеварку</button>
+                </div>
+                <div class="coffee-dataset">
+                    <div class="coffee-volume">
+                        <div class="title coffee-volume-title">объем: <span id="waterValue">100</span> мл</div>
+                        <form class="coffee-volume-input">
+                            <input name="volume" id="waterInput" type="text" placeholder="мл" value="100" />
+                            <button class="btn" id="waterBtn">добавить</button>
+                        </form>
+                    </div>
+                    <!-- <div class="coffee-addwater">
+                        <div class="coffee-addwater-title">добавить воды: <span id="addwaterValue">100</span> мл </div>
+                        <form class="coffee-addwater-input">
+                            <input name="addwater" id="addwaterInput" type="text" placeholder="мл" onchange="addwaterFormEvent(this.value)" />
+                            <button class="btn" id="addwaterBtn">добавить</button>
+                        </form>
+                    </div> -->
+                    <button class="btn" id="runBtn">заварить</button>
+                </div>
+                <div class="coffee-process">
+                    <div class="title coffee-process-time">
+                        <p>оценочное время ожидания: </p>
+                        <span id="timeValue"></span>
+                        <div class="timer-coffee">
+                            <div id="min">00</div>
+                            <span> : </span>
+                            <div id="sec">00</div>
+                        </div>
+                    </div>
+                    <div class="title coffee-process-status">в процессе: 
+                        <span id="processValue"></span>
+                    </div>
+                </div>
+                <div class="title coffee-result"></div>
+            </div>
+        </div>
+    </section><hr>
+    <a class="link" href="./index.html">назад</a>
+    <script src="./js/coffee-v1-1.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+// .coffee {}
+.coffee-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    @media (max-width: 680px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+// .coffee-img {}
+.coffee-desc {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    flex-direction: column;
+    gap: 10px;
+    @media (max-width: 400px) {gap: 10px;}
+}
+.coffee-title {
+    font-weight: 600;
+    font-size: 24px;
+}
+.coffee-data-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.coffee-power, .coffee-capacity, .coffee-volume {
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 400px) {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.coffee-addwater {
+    display: flex;
+    justify-content: space-between;
+}
+.coffee-volume-title {margin-right: 30px;}
+.coffee-dataset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+// .coffee-process {}
+.coffee-process-time {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: 400px) {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+// .coffee-result {}
+.timer-coffee {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    font-size: 30px;
+    font-weight: 600;
+}
+.error {
+    color: #c61b1b;
+}
