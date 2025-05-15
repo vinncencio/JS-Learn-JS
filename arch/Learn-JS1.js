@@ -13778,17 +13778,20 @@ Promise.all завершается с ошибкой, если она возни
 		'https://api.github.com/users/remy',
 		'https://no-such-url'
 	];
+	let res = [];
 	Promise.allSettled(urls.map(url => fetch(url)))
 		.then(results => { // (*)
 			results.forEach((result, num) => {
 				if (result.status == "fulfilled") {
-					alert(`${urls[num]}: ${result.value.status}`);
+					res.push(`${urls[num]}: ${result.value.status}`);
 				}
 				if (result.status == "rejected") {
-					alert(`${urls[num]}: ${result.reason}`);
+					res.push(`${urls[num]}: ${result.reason}`);
 				}
 			});
+			// console.log(results);
 		});
+	// console.log(res);
 Массив results в строке (*) будет таким:
 	[
 		{status: 'fulfilled', value: ...объект ответа...},
@@ -13796,11 +13799,113 @@ Promise.all завершается с ошибкой, если она возни
 		{status: 'rejected', reason: ...объект ошибки...}
 	]
 То есть, для каждого промиса у нас есть его статус и значение/ошибка.
+	console.log(res): []
+		0: "https://api.github.com/users/iliakan: 200"
+		1: "https://api.github.com/users/remy: 200"
+		2: "https://no-such-url: TypeError: Failed to fetch"
+		length: 3
+		[[Prototype]]: Array(0)
+	console.log(results): (3) [{…}, {…}, {…}]
+		0: {status: 'fulfilled', value: Response}
+		1: {status: 'fulfilled', value: Response}
+		2: {status: 'rejected', reason: TypeError: Failed to fetch at 'http://127.0.0.1:5500/js/main1-10-11.js:110:36' at Array.map (…)}
+		length: 3
+		[[Prototype]]: Array(0)
 
+Полифил.
+Если браузер не поддерживает Promise.allSettled, для него легко сделать полифил:
+	if(!Promise.allSettled) {
+		Promise.allSettled = function(promises) {
+			return Promise.all(promises.map(p => Promise.resolve(p)
+				.then(value => ({
+					status: 'fulfilled',
+					value: value
+				}), error => ({
+					status: 'rejected',
+					reason: error
+				}))
+			));
+		};
+	}
+В этом коде promises.map берёт аргументы, превращает их в промисы (на всякий случай) и добавляет каждому обработчик .then.
+Этот обработчик превращает успешный результат value в {state:'fulfilled', value: value}, а ошибку error в {state:'rejected', reason: error}. Это как раз и есть формат результатов Promise.allSettled.
+Затем мы можем использовать Promise.allSettled, чтобы получить результаты всех промисов, даже если при выполнении какого-то возникнет ошибка.
 
+Promise.race
+Метод очень похож на Promise.all, но ждёт только первый выполненный промис, из которого берёт результат (или ошибку).
+Синтаксис:
+	let promise = Promise.race(iterable);
+Например, тут результат будет 1:
+	Promise.race([
+		new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+		new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 2000)),
+		new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+	]).then(alert); // 1
+Быстрее всех выполнился первый промис, он и дал результат. После этого остальные промисы игнорируются.
 
+Promise.any
+Метод очень похож на Promise.race, но ждёт только первый успешно выполненный промис, из которого берёт результат.
+Если ни один из переданных промисов не завершится успешно, тогда возвращённый объект Promise будет отклонён с помощью AggregateError – специального объекта ошибок, который хранит все ошибки промисов в своём свойстве errors.
+Синтаксис:
+	let promise = Promise.any(iterable);
+Например, здесь, результатом будет 1:
+	Promise.any([
+		new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 1000)),
+		new Promise((resolve, reject) => setTimeout(() => resolve(1), 2000)),
+		new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+	]).then(alert); // 1
+Первый промис в этом примере был самым быстрым, но он был отклонён, поэтому результатом стал второй. После того, как первый успешно выполненный промис "выйграет гонку", все дальнейшие результаты будут проигнорированы.
+Вот пример, в котором все промисы отклоняются:
+	Promise.any([
+		new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 1000)),
+		new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ещё одна ошибка!")), 2000))
+	]).catch(error => {
+		console.log(error.constructor.name); // AggregateError
+		console.log(error.errors[0]); // Error: Ошибка!
+		console.log(error.errors[1]); // Error: Ещё одна ошибка!
+	});
+Как вы можете видеть, объекты ошибок для отклонённых промисов доступны в свойстве errors объекта AggregateError.
+// если какой-либо из промисов в any() выполнится успешно, то catch не сработает.
 
+Promise.resolve/reject
+Методы Promise.resolve и Promise.reject редко используются в современном коде, так как синтаксис async/await (мы рассмотрим его чуть позже) делает их, в общем-то, не нужными. Мы рассмотрим их здесь для полноты картины, а также для тех, кто по каким-то причинам не может использовать async/await.
 
+Promise.resolve(value) // создаёт успешно выполненный промис с результатом value.
+То же самое, что:
+	let promise = new Promise(resolve => resolve(value));
+Этот метод используют для совместимости: когда ожидается, что функция возвратит именно промис.
+Например, функция loadCached ниже загружает URL и запоминает (кеширует) его содержимое. При будущих вызовах с тем же URL он тут же читает предыдущее содержимое из кеша, но использует Promise.resolve, чтобы сделать из него промис, для того, чтобы возвращаемое значение всегда было промисом:
+	let cache = new Map();
+	function loadCached(url) {
+		if (cache.has(url)) {
+			return Promise.resolve(cache.get(url)); // (*)
+		}
+		return fetch(url)
+			.then(response => response.text())
+			.then(text => {
+				cache.set(url,text);
+				return text;
+			});
+	}
+Мы можем писать loadCached(url).then(…), потому что функция loadCached всегда возвращает промис. Мы всегда можем использовать .then после loadCached. Это и есть цель использования Promise.resolve в строке (*).
+
+Promise.reject
+Promise.reject(error) // создаёт промис, завершённый с ошибкой error.
+То же самое, что:
+	let promise = new Promise((resolve, reject) => reject(error));
+На практике этот метод почти никогда не используется.
+
+Итого:
+Мы ознакомились с шестью статическими методами класса Promise:
+	1. Promise.all(promises) – ожидает выполнения всех промисов и возвращает массив с результатами. Если любой из указанных промисов вернёт ошибку, то результатом работы Promise.all будет эта ошибка, результаты остальных промисов будут игнорироваться.
+	2. Promise.allSettled(promises) /*(добавлен недавно)*/ – ждёт, пока все промисы завершатся и возвращает их результаты в виде массива с объектами, у каждого объекта два свойства:
+		status: "fulfilled", если выполнен успешно, или "rejected", если ошибка,
+		value: результат, если успешно, или reason: ошибка, если нет.
+	3. Promise.race(promises) – ожидает первый выполненный промис, который становится его результатом, остальные игнорируются.
+	4. Promise.any(promises) (добавлен недавно) – ожидает первый успешно выполненный промис, который становится его результатом, остальные игнорируются. Если все переданные промисы отклонены, AggregateError становится ошибкой Promise.any.
+	5. Promise.resolve(value) – возвращает успешно выполнившийся промис с результатом value.
+	6. Promise.reject(error) – возвращает промис с ошибкой error.
+Из всех перечисленных методов, самый часто используемый – это, пожалуй, Promise.all.
 
 
 

@@ -100,7 +100,57 @@ new Promise((resolve, reject) => {
 // }).catch(alert); // Uncaught Error: Whoops!
 
 /* #1.11.5. Promise API, статические методы промисов */
+// Promise.all([
+//     new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+//     new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 2000)),
+//     new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+// ]).catch(console.log); // Error: Ошибка!
 
+// Promise.allSettled([
+//     new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+//     new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 2000)),
+//     new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+// ]).then(console.log); // (3) [{…}, {…}, {…}]
+
+// let urls = [
+//     'https://api.github.com/users/iliakan',
+//     'https://api.github.com/users/remy',
+//     'https://api.github.com/users/jeresig',
+//     'https://no-such-url'
+// ];
+// let res = [];
+// Promise.allSettled(urls.map(url => fetch(url)))
+//     .then(results => { // (*)
+//         results.forEach((result, num) => {
+//             if (result.status == "fulfilled") {
+//                 res.push(`${urls[num]}: ${result.value.status}`);
+//             }
+//             if (result.status == "rejected") {
+//                 res.push(`${urls[num]}: ${result.reason}`);
+//             }
+//         });
+//         console.log(results);
+//     });
+// console.log(res);
+
+// Promise.race([
+//     new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+//     new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 2000)),
+//     new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+// ]).then(console.log); // 1
+
+// Promise.any([
+//     new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ошибка!")), 1000)),
+// 	new Promise((resolve, reject) => setTimeout(() => reject(new Error("Ещё одна ошибка!")), 2000)),
+//     // new Promise((resolve, reject) => setTimeout(() => resolve(2), 2000)),
+//     // new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+// ])
+// .then(console.log) // 2
+// .catch(error => {
+// 	console.log(error.constructor.name); // AggregateError
+// 	console.log(error.errors[0]); // Error: Ошибка!
+// 	console.log(error.errors[1]); // Error: Ещё одна ошибка!
+// });
 
 
 
