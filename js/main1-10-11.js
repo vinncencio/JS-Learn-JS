@@ -152,5 +152,12 @@ new Promise((resolve, reject) => {
 // 	console.log(error.errors[1]); // Error: Ещё одна ошибка!
 // });
 
+/* #1.11.7. Микрозадачи */
 
+// В каком порядке выполнится код?
+// const promise = new Promise(res => setTimeout(() => res('Resolve in Promise'), 1000));
+// console.log('begin');
+// promise.then(res => {return res}).then(alert);
+// console.log('end');
+// begin, end, alert
 
