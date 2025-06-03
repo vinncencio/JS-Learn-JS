@@ -161,3 +161,46 @@ new Promise((resolve, reject) => {
 // console.log('end');
 // begin, end, alert
 
+/* #1.11.8. Async/await */
+// 1. Перепишите один из примеров раздела Цепочка промисов, используя async/await вместо .then/catch:
+function loadJson(url) {
+    return fetch(url)
+        .then(response => {
+            if (response.status == 200) {
+                return response.json();
+            } else {
+                throw new Error(response.status);
+            }
+        })
+}
+// loadJson('no-such-user.json') // (1)
+//     .catch(alert); // Error: 404
+
+async function loadJsonAsync(url) {
+    const response = await fetch(url);
+    if (response.status == 200) return response.json();
+    else throw new Error(response.status);
+}
+// loadJsonAsync('no-such-user.json') // (2)
+//     .catch(alert); // Error: 404
+
+async function loadJson(url) { // (1)
+    let response = await fetch(url); // (2)
+    if (response.status == 200) {
+        let json = await response.json(); // (3)
+        return json;
+    }
+    throw new Error(response.status);
+}
+// loadJson('no-such-user.json')
+//     .catch(alert); // Error: 404 (4)
+
+// 3. Есть «обычная» функция. Как можно внутри неё получить результат выполнения async–функции?
+async function wait() {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return 10;
+}
+function f() {
+    wait().then(res => console.log(res)); // вызвать wait() и дождаться результата "10" от async–функции
+}
+f();
