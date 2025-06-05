@@ -2,8 +2,8 @@
 let rangeNumb = {
     from: 1,
     to: 5,
-    [Symbol.iterator]: function* () {
-        // *[Symbol.iterator]() { // краткая запись для [Symbol.iterator]: function*()
+    // [Symbol.iterator]: function* () {
+    *[Symbol.iterator]() { // краткая запись для [Symbol.iterator]: function*()
         for (let value = this.from; value <= this.to; value++) yield value;
     }
 };
