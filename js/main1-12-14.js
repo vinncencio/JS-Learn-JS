@@ -72,8 +72,8 @@ async function* generatorAsync(count) {
 })();
 
 /* #1.13.1. Модули, введение */
-import {meta} from './module-one.js';
-console.log(meta.name); // admin
+import {obj} from './module-one.js';
+console.log(obj.name); // admin
 console.log(import.meta.url); // http://127.0.0.1:5500/js/main1-12-14.js
 
 

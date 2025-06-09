@@ -1,1 +1,1 @@
-export let meta = {name: 'admin'};
+export let obj = {name: 'admin'};
