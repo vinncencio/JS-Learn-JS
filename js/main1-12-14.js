@@ -67,7 +67,14 @@ async function* generatorAsync(count) {
 (async() => {
     let gnrtr = generatorAsync(10);
     for await (const iterator of gnrtr) { // перебираем генератор и получаем все значения
-        console.log(`Id:${iterator.id}\nValue: ${iterator.title}\nFuncCompleted: ${iterator.completed}`); //выводим полученные данные
+        // console.log(`Id:${iterator.id}\nValue: ${iterator.title}\nFuncCompleted: ${iterator.completed}`); // выводим полученные данные
     }
 })();
+
+/* #1.13.1. Модули, введение */
+import {meta} from './module-one.js';
+console.log(meta.name); // admin
+console.log(import.meta.url); // http://127.0.0.1:5500/js/main1-12-14.js
+
+
 
