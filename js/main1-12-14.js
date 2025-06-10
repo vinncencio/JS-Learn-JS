@@ -73,8 +73,14 @@ async function* generatorAsync(count) {
 
 /* #1.13.1. Модули, введение */
 import {obj} from './module-one.js';
-console.log(obj.name); // admin
-console.log(import.meta.url); // http://127.0.0.1:5500/js/main1-12-14.js
+// console.log(obj.name); // admin
+// console.log(import.meta.url); // http://127.0.0.1:5500/js/main1-12-14.js
 
+/* #1.13.2. Экспорт и импорт */
+// Импорт объекта с набором функций.
+import expObject from './module-two.js';
+expObject.first(); // func first
+expObject.second(); // func second
+expObject.third(); // func third
 
 
