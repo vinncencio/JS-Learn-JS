@@ -35,6 +35,21 @@
         <section class="degree">
             <a class="link" href="./degree.html" target="_self">Степень числа</a>
         </section><hr>
+        <section class="dynImport">
+            <script>
+                async function importAsync(){
+                    await import('./js/outs.js')
+                        .then(result => setTimeout(result.out1, 1000));
+                }                
+                async function importAsync1(){
+                    let res = await import('./js/outs.js');
+                    res.out2();
+                    res.default();
+                }                
+            </script>
+            <button id="dynImport" class="btn1" onclick="importAsync()">нажми меня</button>
+            <button id="dynImport2" class="btn1" onclick="importAsync1()">нажми меня 2</button>
+        </section><hr>
     </main>
     <script src="./js/main1-1-5.js"></script>
     <!-- <script src="./js/main1-7-9.js"></script> -->

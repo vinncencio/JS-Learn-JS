@@ -83,4 +83,6 @@ expObject.first(); // func first
 expObject.second(); // func second
 expObject.third(); // func third
 
+/* #1.13.3. Динамические импорты */
+// скрипт внутри index.html > section.dynImport
 
