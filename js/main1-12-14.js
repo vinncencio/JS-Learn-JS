@@ -64,7 +64,7 @@ async function* generatorAsync(count) {
         yield data; // возвращаем результат запроса
     }
 }
-(async() => {
+(async () => {
     let gnrtr = generatorAsync(10);
     for await (const iterator of gnrtr) { // перебираем генератор и получаем все значения
         // console.log(`Id:${iterator.id}\nValue: ${iterator.title}\nFuncCompleted: ${iterator.completed}`); // выводим полученные данные
@@ -72,17 +72,50 @@ async function* generatorAsync(count) {
 })();
 
 /* #1.13.1. Модули, введение */
-import {obj} from './module-one.js';
+import { obj } from './module-one.js';
 // console.log(obj.name); // admin
 // console.log(import.meta.url); // http://127.0.0.1:5500/js/main1-12-14.js
 
 /* #1.13.2. Экспорт и импорт */
 // Импорт объекта с набором функций.
 import expObject from './module-two.js';
-expObject.first(); // func first
-expObject.second(); // func second
-expObject.third(); // func third
+// expObject.first(); // func first
+// expObject.second(); // func second
+// expObject.third(); // func third
 
 /* #1.13.3. Динамические импорты */
 // скрипт внутри index.html > section.dynImport
+
+/* #1.14.1. Proxy и Reflect */
+// #1. Proxy
+let numbers = [0, 1, 2];
+numbers = new Proxy(numbers, {
+    get(target, prop) {
+        if (prop in target) return target[prop]
+        else return 0; // значение по умолчанию
+    }
+});
+console.log(numbers[1]); // 1
+console.log(numbers[123]); // 0 (нет такого элемента)
+
+numbers = new Proxy(numbers, { // (*)
+    set(target, prop, val) { // для перехвата записи свойства
+        if (typeof val == 'number') {
+            target[prop] = val;
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+numbers.push(1); // добавилось успешно
+numbers.push(2); // добавилось успешно
+console.log("Длина: " + numbers.length); // 2
+// numbers.push("тест"); // TypeError (ловушка set на прокси вернула false)
+// console.log("Интерпретатор никогда не доходит до этой строки (из-за ошибки в строке выше)");
+
+
+
+
+
 
