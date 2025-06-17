@@ -114,8 +114,98 @@ console.log("Длина: " + numbers.length); // 2
 // numbers.push("тест"); // TypeError (ловушка set на прокси вернула false)
 // console.log("Интерпретатор никогда не доходит до этой строки (из-за ошибки в строке выше)");
 
+// "В диапазоне" с ловушкой has
+let range = {start: 1, end: 10};
+range = new Proxy(range, {
+    has(target, prop) {
+        return prop >= target.start && prop <= target.end
+    }
+});
+console.log(5 in range); // true
+console.log(50 in range); // false
+
+// декоратор-обёртка задержки delay(f, ms)
+function delay(f, ms) { // возвращает обёртку, которая вызывает функцию f через таймаут
+    // return function() {setTimeout(() => f.apply(this, arguments), ms)}; // (*)
+    return new Proxy(f, {
+        apply(target, thisArg, args) {
+            setTimeout(() => target.apply(thisArg, args), ms);
+        }
+    });
+}
+function sayHi(user) {
+    console.log(`Привет, ${user}!`);
+}
+sayHi = delay(sayHi, 3000); // после обёртки вызовы sayHi будут срабатывать с задержкой в 3 секунды
+console.log(sayHi.length); // 1
+sayHi("Вася"); // Привет, Вася! (через 3 секунды)
+
+// #2. Reflect
+let user = {name: "Вася"};
+user = new Proxy(user, {
+    get(target, prop, receiver) {
+        console.log(`GET ${prop}`);
+        return Reflect.get(target, prop, receiver); // (1)
+    },
+    set(target, prop, val, receiver) {
+        console.log(`SET ${prop}=${val}`);
+        return Reflect.set(target, prop, val, receiver); // (2)
+    }
+});
+let name = user.name; // выводит "GET name"
+user.name = "Петя"; // выводит "SET name=Петя"
+
+// унаследуем от проксированного user объект admin
+user = {
+    _name: "Гость",
+    get name() {return this._name}
+};
+let userProxy = new Proxy(user, {
+    get(target, prop, receiver) { // receiver = admin
+        // return Reflect.get(target, prop, receiver); // (*)
+		return Reflect.get(...arguments);
+    }
+});
+let admin = {
+    __proto__: userProxy,
+    _name: "Админ"
+};
+console.log(admin.name); // Админ
+
+// приватные поля классов
+class User {
+    #name = "Гость";
+    getName() {return this.#name}
+}
+user = new User();
+user = new Proxy(user, {
+    get(target, prop, receiver) {
+        let value = Reflect.get(...arguments);
+        return typeof value == 'function' ? value.bind(target) : value;
+    }
+});
+console.log(user.getName()); // Гость
+
+// 1. Ошибка при чтении несуществующего свойства
+user = {name: "John"};
+function wrap(target) {
+    return new Proxy(target, {
+        get(target, prop, receiver) {
+            if (prop in target) {
+                // return target[prop];
+                return Reflect.get(target, prop, receiver);
+            } else {
+                // throw new Error("такого свойства не существует");
+                throw new ReferenceError(`Свойство не существует: "${prop}"`)
+            }
+        }
+    });
+}
+user = wrap(user);
+console.log(user.name); // John
+console.log(user.age); // Ошибка: такого свойства не существует
 
 
 
 
-
+//
