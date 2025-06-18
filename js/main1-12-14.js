@@ -205,7 +205,7 @@ user = wrap(user);
 // console.log(user.name); // John
 // console.log(user.age); // Ошибка: такого свойства не существует
 
-// 2. 
+// 2. Получение элемента массива с отрицательной позицией
 let array = [1, 2, 3];
 array = new Proxy(array, {
     get(target, prop, receiver) {
