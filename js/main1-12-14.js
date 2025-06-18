@@ -95,8 +95,8 @@ numbers = new Proxy(numbers, {
         else return 0; // значение по умолчанию
     }
 });
-console.log(numbers[1]); // 1
-console.log(numbers[123]); // 0 (нет такого элемента)
+// console.log(numbers[1]); // 1
+// console.log(numbers[123]); // 0 (нет такого элемента)
 
 numbers = new Proxy(numbers, { // (*)
     set(target, prop, val) { // для перехвата записи свойства
@@ -110,19 +110,19 @@ numbers = new Proxy(numbers, { // (*)
 });
 numbers.push(1); // добавилось успешно
 numbers.push(2); // добавилось успешно
-console.log("Длина: " + numbers.length); // 2
+// console.log("Длина: " + numbers.length); // 2
 // numbers.push("тест"); // TypeError (ловушка set на прокси вернула false)
 // console.log("Интерпретатор никогда не доходит до этой строки (из-за ошибки в строке выше)");
 
 // "В диапазоне" с ловушкой has
-let range = {start: 1, end: 10};
+let range = { start: 1, end: 10 };
 range = new Proxy(range, {
     has(target, prop) {
         return prop >= target.start && prop <= target.end
     }
 });
-console.log(5 in range); // true
-console.log(50 in range); // false
+// console.log(5 in range); // true
+// console.log(50 in range); // false
 
 // декоратор-обёртка задержки delay(f, ms)
 function delay(f, ms) { // возвращает обёртку, которая вызывает функцию f через таймаут
@@ -137,18 +137,18 @@ function sayHi(user) {
     console.log(`Привет, ${user}!`);
 }
 sayHi = delay(sayHi, 3000); // после обёртки вызовы sayHi будут срабатывать с задержкой в 3 секунды
-console.log(sayHi.length); // 1
-sayHi("Вася"); // Привет, Вася! (через 3 секунды)
+// console.log(sayHi.length); // 1
+// sayHi("Вася"); // Привет, Вася! (через 3 секунды)
 
 // #2. Reflect
-let user = {name: "Вася"};
+let user = { name: "Вася" };
 user = new Proxy(user, {
     get(target, prop, receiver) {
-        console.log(`GET ${prop}`);
+        // console.log(`GET ${prop}`);
         return Reflect.get(target, prop, receiver); // (1)
     },
     set(target, prop, val, receiver) {
-        console.log(`SET ${prop}=${val}`);
+        // console.log(`SET ${prop}=${val}`);
         return Reflect.set(target, prop, val, receiver); // (2)
     }
 });
@@ -158,24 +158,24 @@ user.name = "Петя"; // выводит "SET name=Петя"
 // унаследуем от проксированного user объект admin
 user = {
     _name: "Гость",
-    get name() {return this._name}
+    get name() { return this._name }
 };
 let userProxy = new Proxy(user, {
     get(target, prop, receiver) { // receiver = admin
         // return Reflect.get(target, prop, receiver); // (*)
-		return Reflect.get(...arguments);
+        return Reflect.get(...arguments);
     }
 });
 let admin = {
     __proto__: userProxy,
     _name: "Админ"
 };
-console.log(admin.name); // Админ
+// console.log(admin.name); // Админ
 
 // приватные поля классов
 class User {
     #name = "Гость";
-    getName() {return this.#name}
+    getName() { return this.#name }
 }
 user = new User();
 user = new Proxy(user, {
@@ -184,10 +184,10 @@ user = new Proxy(user, {
         return typeof value == 'function' ? value.bind(target) : value;
     }
 });
-console.log(user.getName()); // Гость
+// console.log(user.getName()); // Гость
 
 // 1. Ошибка при чтении несуществующего свойства
-user = {name: "John"};
+user = { name: "John" };
 function wrap(target) {
     return new Proxy(target, {
         get(target, prop, receiver) {
@@ -202,10 +202,41 @@ function wrap(target) {
     });
 }
 user = wrap(user);
-console.log(user.name); // John
-console.log(user.age); // Ошибка: такого свойства не существует
+// console.log(user.name); // John
+// console.log(user.age); // Ошибка: такого свойства не существует
 
+// 2. 
+let array = [1, 2, 3];
+array = new Proxy(array, {
+    get(target, prop, receiver) {
+        if (prop < 0) prop = +prop + target.length;
+        // return target[prop];
+        return Reflect.get(target, prop, receiver);
+    }
+});
+console.log(array[-1]); // 3
+console.log(array[-2]); // 2
+console.log(array[2]); // 3
 
+// 3. Создайте функцию makeObservable(target), которая делает объект «наблюдаемым», возвращая прокси.
+let handlers = Symbol('handlers');
+function makeObservable(target) {
+    target[handlers] = []; // 1. Создадим хранилище обработчиков
+    target.observe = function(handler) {
+        this[handlers].push(handler); // положим туда функции-обработчики для вызовов в будущем
+    };
+    return new Proxy(target, { // 2. Создадим прокси для реакции на изменения
+        set(target, property, value, receiver) {
+            let success = Reflect.set(...arguments); // перенаправим операцию к оригинальному объекту
+            if (success) { // если не произошло ошибки при записи свойства
+                target[handlers].forEach(handler => handler(property, value)); // вызовем обработчики
+            }
+            return success;
+        }
+    });
+}
+user = {};
+user = makeObservable(user);
+user.observe((key, value) => console.log(`SET ${key}=${value}`));
+user.name = "John"; // SET name=John
 
-
-//
