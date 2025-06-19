@@ -214,9 +214,9 @@ array = new Proxy(array, {
         return Reflect.get(target, prop, receiver);
     }
 });
-console.log(array[-1]); // 3
-console.log(array[-2]); // 2
-console.log(array[2]); // 3
+// console.log(array[-1]); // 3
+// console.log(array[-2]); // 2
+// console.log(array[2]); // 3
 
 // 3. Создайте функцию makeObservable(target), которая делает объект «наблюдаемым», возвращая прокси.
 let handlers = Symbol('handlers');
@@ -238,5 +238,20 @@ function makeObservable(target) {
 user = {};
 user = makeObservable(user);
 user.observe((key, value) => console.log(`SET ${key}=${value}`));
-user.name = "John"; // SET name=John
+// user.name = "John"; // SET name=John
+
+/* #1.14.2. Eval: выполнение строки кода */
+let value = eval('1+1');
+// console.log(value); // 2
+
+// 1. Создайте калькулятор, который запрашивает ввод какого-нибудь арифметического выражения и возвращает результат его вычисления.
+// let val = prompt('введите запрос', '');
+// alert(eval(val));
+// alert(eval(prompt('введите пример', '')));
+
+
+
+
+
+
 
