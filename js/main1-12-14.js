@@ -264,9 +264,38 @@ function curry(func) {
 // Пример использования:
 function sum(a, b, c) {return a + b + c}
 let curriedSum = curry(sum);
-console.log( curriedSum(1, 2, 3) ); // 6, всё ещё можно вызывать нормально
-console.log( curriedSum(1)(2,3) ); // 6, каррирование первого аргумента
-console.log( curriedSum(1)(2)(3) ); // 6, каррирование всех аргументов
+// console.log( curriedSum(1, 2, 3) ); // 6, всё ещё можно вызывать нормально
+// console.log( curriedSum(1)(2,3) ); // 6, каррирование первого аргумента
+// console.log( curriedSum(1)(2)(3) ); // 6, каррирование всех аргументов
+
+/* #1.14.4. Ссылочный тип */
+// 'use strict'
+user = {
+    name: "John",
+    hi() {console.log('Hi', this.name, '!')},
+    bye() {console.log("By", this.name)}
+};
+user.hi(); // Hi John !
+// (user.name == "John" ? user.hi : user.bye)(); // Uncaught TypeError: Cannot read properties of undefined (reading 'name')
+(user.name == "John" ? user.bye.bind(user) : user.hi.bind(user))(); // работает
+
+// 1. Проверка синтаксиса. Каким будет результат выполнения этого кода?
+user = {
+	name: "John",
+	go: function() { console.log(this.name) }
+}
+// (user.go)(); // Uncaught TypeError: {(intermediate value)(intermediate value)} is not a function
+// пропущена точка с запятой после объекта user
+;
+
+//2. Объясните значение this
+let obj1, method;
+obj1 = { go: function() { console.log(this) }};
+obj1.go();               // (1) [object Object]
+(obj1.go)();             // (2) [object Object]
+(method = obj1.go)();    // (3) undefined
+(obj1.go || obj1.stop)(); // (4) undefined
+
 
 
 
