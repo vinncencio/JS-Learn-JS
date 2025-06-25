@@ -275,9 +275,9 @@ user = {
     hi() {console.log('Hi', this.name, '!')},
     bye() {console.log("By", this.name)}
 };
-user.hi(); // Hi John !
+// user.hi(); // Hi John !
 // (user.name == "John" ? user.hi : user.bye)(); // Uncaught TypeError: Cannot read properties of undefined (reading 'name')
-(user.name == "John" ? user.bye.bind(user) : user.hi.bind(user))(); // работает
+// (user.name == "John" ? user.bye.bind(user) : user.hi.bind(user))(); // работает
 
 // 1. Проверка синтаксиса. Каким будет результат выполнения этого кода?
 user = {
@@ -291,13 +291,38 @@ user = {
 //2. Объясните значение this
 let obj1, method;
 obj1 = { go: function() { console.log(this) }};
-obj1.go();               // (1) [object Object]
-(obj1.go)();             // (2) [object Object]
-(method = obj1.go)();    // (3) undefined
-(obj1.go || obj1.stop)(); // (4) undefined
+// obj1.go();               // (1) [object Object]
+// (obj1.go)();             // (2) [object Object]
+// (method = obj1.go)();    // (3) undefined
+// (obj1.go || obj1.stop)(); // (4) undefined
 
+/* #1.14.5. Побитовые операторы */
+console.log('Bitwise AND: 2 & 3 =', 2 & 3); // 2
+console.log('Bitwise OR: 2 | 3 =', 2 | 3); // 3
+console.log('Bitwise XOR: 2 ^ 3 =', 2 ^ 3); // 1
+console.log('Bitwise NOT: ~2 =', ~2 ); // -3
+console.log('Bitwise left shift: 2 << 3 =', 2 << 3); // 16
+console.log('Bitwise right shift: 2 >> 3 =', 2 >> 3); // 0
+console.log('Bitwise unsigned right shift: 2 >>> 3 =', 2 >>> 3); // 0
+// битовые операции отбрасывающие десятичную часть:
+console.log(2.66 ^ 0); // 2
+console.log(~~2.66); // 2
+// поиск символа в строке; str.indexOf("подстрока") возвращает позицию подстроки в str, или -1 если не нашёл.
+let str = "Проверка";
+if (~str.indexOf("верка")) { // Сочетание "if (~...indexOf)" читается как "если найдено"
+    console.log( 'найдено!' );
+}
 
-
-
+// 2. Напишите функцию isInteger(num), которая возвращает true, если num – целое число, иначе false.
+// function isInteger(num){
+//     if (~~Math.abs(num) === Math.abs(num)) return true
+//     else return false;
+// }
+function isInteger(num) {
+    return (num ^ 0) === num;
+}
+console.log( isInteger(1) ); // true
+console.log( isInteger(1.5) ); // false
+console.log( isInteger(-0.5) ); // false
 
 
