@@ -315,7 +315,7 @@ if (~str.indexOf("верка")) { // Сочетание "if (~...indexOf)" чи�
 
 // 2. Напишите функцию isInteger(num), которая возвращает true, если num – целое число, иначе false.
 // function isInteger(num){
-//     if (~~Math.abs(num) === Math.abs(num)) return true
+//     if (~~num === num) return true
 //     else return false;
 // }
 function isInteger(num) {
