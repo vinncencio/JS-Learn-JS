@@ -297,21 +297,21 @@ obj1 = { go: function() { console.log(this) }};
 // (obj1.go || obj1.stop)(); // (4) undefined
 
 /* #1.14.5. Побитовые операторы */
-console.log('Bitwise AND: 2 & 3 =', 2 & 3); // 2
-console.log('Bitwise OR: 2 | 3 =', 2 | 3); // 3
-console.log('Bitwise XOR: 2 ^ 3 =', 2 ^ 3); // 1
-console.log('Bitwise NOT: ~2 =', ~2 ); // -3
-console.log('Bitwise left shift: 2 << 3 =', 2 << 3); // 16
-console.log('Bitwise right shift: 2 >> 3 =', 2 >> 3); // 0
-console.log('Bitwise unsigned right shift: 2 >>> 3 =', 2 >>> 3); // 0
-// битовые операции отбрасывающие десятичную часть:
-console.log(2.66 ^ 0); // 2
-console.log(~~2.66); // 2
+// console.log('Bitwise AND: 2 & 3 =', 2 & 3); // 2
+// console.log('Bitwise OR: 2 | 3 =', 2 | 3); // 3
+// console.log('Bitwise XOR: 2 ^ 3 =', 2 ^ 3); // 1
+// console.log('Bitwise NOT: ~2 =', ~2 ); // -3
+// console.log('Bitwise left shift: 2 << 3 =', 2 << 3); // 16
+// console.log('Bitwise right shift: 2 >> 3 =', 2 >> 3); // 0
+// console.log('Bitwise unsigned right shift: 2 >>> 3 =', 2 >>> 3); // 0
+// // битовые операции отбрасывающие десятичную часть:
+// console.log(2.66 ^ 0); // 2
+// console.log(~~2.66); // 2
 // поиск символа в строке; str.indexOf("подстрока") возвращает позицию подстроки в str, или -1 если не нашёл.
 let str = "Проверка";
-if (~str.indexOf("верка")) { // Сочетание "if (~...indexOf)" читается как "если найдено"
-    console.log( 'найдено!' );
-}
+// if (~str.indexOf("верка")) { // Сочетание "if (~...indexOf)" читается как "если найдено"
+//     console.log( 'найдено!' );
+// }
 
 // 2. Напишите функцию isInteger(num), которая возвращает true, если num – целое число, иначе false.
 // function isInteger(num){
@@ -321,8 +321,32 @@ if (~str.indexOf("верка")) { // Сочетание "if (~...indexOf)" чи�
 function isInteger(num) {
     return (num ^ 0) === num;
 }
-console.log( isInteger(1) ); // true
-console.log( isInteger(1.5) ); // false
-console.log( isInteger(-0.5) ); // false
+// console.log( isInteger(1) ); // true
+// console.log( isInteger(1.5) ); // false
+// console.log( isInteger(-0.5) ); // false
 
+/* #1.14.6. BigInt */
+const bigIntEx = 1234567890123456789012345678901234567890n;
+const sameBigint = BigInt("1234567890123456789012345678901234567890");
+const bigintFromNumber = BigInt(10); // то же самое, что и 10n
+console.log(typeof bigIntEx); // bigint
+console.log(typeof sameBigint); // bigint
+console.log(typeof bigintFromNumber); // bigint
+
+console.log(1n + 2n); // 3n
+console.log(5n / 2n); // 2n
+
+let bigint = 1n;
+let number = 2;
+console.log(bigint + BigInt(number)); // 3n // конвертируем number в bigint
+console.log(Number(bigint) + number); // 3 // конвертируем bigint в number
+
+console.log( 1 == 1n ); // true
+console.log( 1 === 1n ); // false
+
+console.log( 1n || 2 ); // 1n
+console.log( 0n || 2 ); // 2
+
+// потеря точности обычных чисел
+console.log(1.15 + 2.30); // 3.4499999999999997
 
