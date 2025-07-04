@@ -329,24 +329,37 @@ function isInteger(num) {
 const bigIntEx = 1234567890123456789012345678901234567890n;
 const sameBigint = BigInt("1234567890123456789012345678901234567890");
 const bigintFromNumber = BigInt(10); // то же самое, что и 10n
-console.log(typeof bigIntEx); // bigint
-console.log(typeof sameBigint); // bigint
-console.log(typeof bigintFromNumber); // bigint
+// console.log(typeof bigIntEx); // bigint
+// console.log(typeof sameBigint); // bigint
+// console.log(typeof bigintFromNumber); // bigint
 
-console.log(1n + 2n); // 3n
-console.log(5n / 2n); // 2n
+// console.log(1n + 2n); // 3n
+// console.log(5n / 2n); // 2n
 
 let bigint = 1n;
 let number = 2;
-console.log(bigint + BigInt(number)); // 3n // конвертируем number в bigint
-console.log(Number(bigint) + number); // 3 // конвертируем bigint в number
+// console.log(bigint + BigInt(number)); // 3n // конвертируем number в bigint
+// console.log(Number(bigint) + number); // 3 // конвертируем bigint в number
 
-console.log( 1 == 1n ); // true
-console.log( 1 === 1n ); // false
+// console.log( 1 == 1n ); // true
+// console.log( 1 === 1n ); // false
 
-console.log( 1n || 2 ); // 1n
-console.log( 0n || 2 ); // 2
+// console.log( 1n || 2 ); // 1n
+// console.log( 0n || 2 ); // 2
 
-// потеря точности обычных чисел
-console.log(1.15 + 2.30); // 3.4499999999999997
+// // потеря точности обычных чисел
+// console.log(1.15 + 2.30); // 3.4499999999999997
 
+/* #1.14.7. Юникод, внутреннее устройство строк */
+console.log('𝒳'[0]); // � показывает странные символы...
+console.log('𝒳'[1]); // � ...части суррогатной пары
+console.log('𝒳'.charCodeAt(0)); // 55349
+console.log('𝒳'.codePointAt(0)); // 119987
+console.log('𝒳'.charCodeAt(0).toString(16)); // d835
+console.log('𝒳'.codePointAt(0).toString(16)); // 1d4b3
+// диакритические знаки
+console.log('u\u0308'); // ü
+console.log('e\u0301'); // é
+// нормализация
+console.log("S\u0307\u0323" == "S\u0323\u0307"); // false
+console.log("S\u0307\u0323".normalize() == "S\u0323\u0307".normalize()); // true
