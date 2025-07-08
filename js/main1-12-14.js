@@ -351,15 +351,44 @@ let number = 2;
 // console.log(1.15 + 2.30); // 3.4499999999999997
 
 /* #1.14.7. Юникод, внутреннее устройство строк */
-console.log('𝒳'[0]); // � показывает странные символы...
-console.log('𝒳'[1]); // � ...части суррогатной пары
-console.log('𝒳'.charCodeAt(0)); // 55349
-console.log('𝒳'.codePointAt(0)); // 119987
-console.log('𝒳'.charCodeAt(0).toString(16)); // d835
-console.log('𝒳'.codePointAt(0).toString(16)); // 1d4b3
-// диакритические знаки
-console.log('u\u0308'); // ü
-console.log('e\u0301'); // é
-// нормализация
-console.log("S\u0307\u0323" == "S\u0323\u0307"); // false
-console.log("S\u0307\u0323".normalize() == "S\u0323\u0307".normalize()); // true
+// console.log('𝒳'[0]); // � показывает странные символы...
+// console.log('𝒳'[1]); // � ...части суррогатной пары
+// console.log('𝒳'.charCodeAt(0)); // 55349
+// console.log('𝒳'.codePointAt(0)); // 119987
+// console.log('𝒳'.charCodeAt(0).toString(16)); // d835
+// console.log('𝒳'.codePointAt(0).toString(16)); // 1d4b3
+// // диакритические знаки
+// console.log('u\u0308'); // ü
+// console.log('e\u0301'); // é
+// // нормализация
+// console.log("S\u0307\u0323" == "S\u0323\u0307"); // false
+// console.log("S\u0307\u0323".normalize() == "S\u0323\u0307".normalize()); // true
+
+/* #1.14.8. Intl: интернационализация в JavaScript */
+let date = Date.now();
+let formatter1 = new Intl.DateTimeFormat("ru");
+let formatter2 = new Intl.DateTimeFormat("ru", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+    // weekday: "long",
+    hour: "numeric",
+    minute: "numeric",
+    // second: "numeric"
+});
+console.log( formatter1.format(date) ); // 08.07.2025
+console.log( formatter2.format(date) ); // 08.07.2025, 15:43
+
+/** 1. Отсортируйте массив с буквой ё (важность: 5)
+Используя Intl.Collator, отсортируйте массив:
+	let animals = ["тигр", "ёж", "енот", "ехидна", "АИСТ", "ЯК"];
+	// ... ваш код ...
+	alert( animals ); // АИСТ,ёж,енот,ехидна,тигр,ЯК
+В этом примере порядок сортировки не должен зависеть от регистра. Что касается буквы "ё", то мы следуем обычным правилам сортировки буквы ё, по которым «е» и «ё» считаются одной и той же буквой, за исключением случая, когда два слова отличаются только в позиции буквы «е» / «ё» – тогда слово с «е» ставится первым.*/
+let animals = ["тигр", "ёж", "енот", "ехидна", "АИСТ", "ЯК"];
+let collator = new Intl.Collator(undefined, {sensitivity: "accent"});
+animals.sort((a, b) => collator.compare(a, b))
+console.log( animals ); // АИСТ,ёж,енот,ехидна,тигр,ЯК
+
+
+
