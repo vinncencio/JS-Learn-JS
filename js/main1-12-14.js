@@ -388,7 +388,8 @@ console.log( formatter2.format(date) ); // 08.07.2025, 15:43
 let animals = ["тигр", "ёж", "енот", "ехидна", "АИСТ", "ЯК"];
 let collator = new Intl.Collator(undefined, {sensitivity: "accent"});
 animals.sort((a, b) => collator.compare(a, b))
-console.log( animals ); // АИСТ,ёж,енот,ехидна,тигр,ЯК
+console.log( animals ); // (6) ['АИСТ', 'ёж', 'енот', 'ехидна', 'тигр', 'ЯК']
+
 
 
 
