@@ -1,8 +1,8 @@
 // #3. 2.1.3. Навигация по DOM-элементам
 // 1. Дочерние элементы в DOM
-// console.log(document.body.firstElementChild); // <div>Пользователи:</div>
-// console.log(document.body.firstElementChild.nextElementSibling); // <ul>...</ul>
-// console.log(document.body.firstElementChild.nextElementSibling.lastElementChild); // <li>Пит</li>
+// console.log(document.body.firstElementChild); 
+// console.log(document.body.firstElementChild.nextElementSibling); 
+// console.log(document.body.firstElementChild.nextElementSibling.lastElementChild); 
 
 // 2. Вопрос о соседях
 // console.log(document.body.lastChild.nextSibling); // null
@@ -19,3 +19,5 @@ for (let i = 0; i < table.rows.length; i++){
 //     let row = table.rows[i];
 //     row.cells[i].style.backgroundColor = 'red';
 // }
+
+
