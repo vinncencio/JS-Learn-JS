@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>list DOM-elements</title>
+    </head>
+    <body>
+        <ul>
+            <li>Животные
+                <ul>
+                    <li>Млекопитающие
+                        <ul>
+                            <li>Коровы</li>
+                            <li>Ослы</li>
+                            <li>Собаки</li>
+                            <li>Тигры</li>
+                        </ul>
+                    </li>
+                    <li>Другие
+                        <ul>
+                            <li>Змеи</li>
+                            <li>Птицы</li>
+                            <li>Ящерицы</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>Рыбы
+                <ul>
+                    <li>Аквариумные
+                        <ul>
+                            <li>Гуппи</li>
+                            <li>Рыба-ангел</li>
+                        </ul>
+                    </li>
+                    <li>Морские
+                        <ul>
+                            <li>Морская форель</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <script>
+            for (let li of document.querySelectorAll("li")) {
+                let title = li.firstChild.data; // получаем название из текстового узла
+                title = title.trim(); // удаляем лишние пробелы c конца строки
+                let count = li.getElementsByTagName("li").length; // считаем количество потомков
+                console.log(title + ": " + count);
+            }
+            console.log(document.body.lastChild.nodeType); // 1
+        </script>
+        <script>
+            let body = document.body;
+            body.innerHTML = "<!--" + body.tagName + "-->";
+            console.log( body.firstChild.data ); // BODY
+        </script>
+    </body>
+</html>
