@@ -9,7 +9,7 @@ const buttons = document.querySelectorAll('.button');
 // }
 // решение через let:
 for (let i = 0; i < buttons.length; i++) {
-    buttons[i].innerHTML = `кнопка ${i+1}`;
+    buttons[i].innerHTML = `${i+1}`;
 	buttons[i].onclick = function(){console.log(i+1)};
 }
 

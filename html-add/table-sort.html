@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sort table by col</title>
+        <link rel="stylesheet" href="./../css/main.css" />
+        <link rel="shortcut icon" href="./../favicon/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" sizes="180x180" href="./../favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="./../favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="./../favicon/favicon-16x16.png" />
+    </head>
+    <body>
+        <main class="main main--blank">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Age</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John</td>
+                        <td>Smith</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Pete</td>
+                        <td>Brown</td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td>Ann</td>
+                        <td>Lee</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+        <script>
+            const table = document.querySelector('table');
+            let sortedRows = Array.from(table.rows)
+                .slice(1)
+                .sort((rowA, rowB) => rowA.cells[0].innerHTML > rowB.cells[0].innerHTML ? 1 : -1);
+            table.tBodies[0].append(...sortedRows);
+        </script>
+    </body>
+</html>

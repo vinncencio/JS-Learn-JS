@@ -13,10 +13,10 @@
     <link rel="manifest" href="./favicon/site.webmanifest">
 </head>
 <body>
-    <header>
+    <header class="header">
         <h2 class="subheader">JS0<span>(ES6 - ECMA Script 6)</span></h2>
     </header>
-    <main><hr>
+    <main>
         <section class="buttons">
             <button class="btn1 button"></button>
             <button class="btn1 button"></button>
@@ -60,12 +60,36 @@
         </section><hr>
         <section class="get-attr">
             <a class="link" href="./getAttr.html" target="_blank" rel="noopener noreferrer">get attribute</a>
+        </section><hr>
+        <section class="tree">
+            <div>
+                <a class="link" href="./html-add/tree.html" target="_blank">дерево</a>
+            </div>
+            <hr />
         </section>
+        <div id="container"></div>
+        <div id="calendar"></div>
+        <hr />
+        <div class="timer2">
+            <div id="clock2">
+                <span id="hour">00</span>:<span id="min">00</span>:<span id="sec">00</span>
+            </div>
+            <input type="button" id="btnStart2" value="старт" class="btn2" />
+            <input type="button" id="btnStop2" value="стоп" class="btn2" />
+        </div><hr />
+        <div id="tableSort">
+            <a href="./html-add/table-sort.html" target="_blank" class="link">сортировка таблицы</a>
+        </div><hr />
     </main>
+    <footer class="footer">
+        <div class="copy">V &copy; 2026</div>
+    </footer>
+
     <script src="./js/main1-1-5.js"></script>
     <!-- <script src="./js/main1-7-9.js"></script> -->
     <!-- <script src="./js/main1-10-11.js"></script> -->
-    <script src="./js/main1-12-14.js" type="module"></script>
+    <!-- <script src="./js/main1-12-14.js" type="module"></script> -->
+    <script src="./js/main2-1.js" type="module"></script>
     <script src="./js/clock.js"></script>
 </body>
 </html>

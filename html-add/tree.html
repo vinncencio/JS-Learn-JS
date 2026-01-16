@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree</title>
+    <link rel="stylesheet" href="./../css/main.css" />
+    <link rel="shortcut icon" href="./../favicon/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./../favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./../favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./../favicon/favicon-16x16.png" />
+</head>
+<body>
+    <main class="main main--blank">
+        <div class="container">
+            <div id="treeCounts">
+                <ul>
+                    <li>
+                        Животные
+                        <ul>
+                            <li>
+                                Млекопитающие
+                                <ul>
+                                    <li>Коровы</li>
+                                    <li>Ослы</li>
+                                    <li>Собаки</li>
+                                    <li>Тигры</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Другие
+                                <ul>
+                                    <li>Змеи</li>
+                                    <li>Птицы</li>
+                                    <li>Ящерицы</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Рыбы
+                        <ul>
+                            <li>
+                                Аквариумные
+                                <ul>
+                                    <li>Гуппи</li>
+                                    <li>Скалярии</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Морские
+                                <ul>
+                                    <li>Морская форель</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <script>
+        function treeCounts() {
+            let lis = document.getElementsByTagName('li');
+            for (let li of lis) {
+                let descendantsCount = li.getElementsByTagName('li').length; // получить количество всех <li> ниже этого <li>
+                if (!descendantsCount) continue;
+                li.firstChild.data += ' [' + descendantsCount + ']'; // добавить непосредственно к текстовому узлу (добавить к тексту)
+            }
+        }
+        treeCounts();
+    </script>
+</body>
+</html>

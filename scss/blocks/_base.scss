@@ -1,6 +1,23 @@
-body {font-family: 'Roboto', Arial, sans-serif}
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(0deg, rgb(139, 193, 167), rgb(124, 216, 255));
+}
+hr {
+    border-width: 1px !important;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+h2 {
+    margin: 0;
+    padding: 0;
+}
 .none {display: none;}
 .logo {padding-left: 10px;}
+.header {
+    padding: 10px;
+    border-bottom: solid 1px #333;
+    & h3 { font-size: 32px; }
+}
 .subheader {
     display: flex;
     align-self: first baseline;
@@ -11,8 +28,15 @@ body {font-family: 'Roboto', Arial, sans-serif}
         color: #333;
     }
 }
+.main {
+    padding: 10px;
+    min-height: 85vh;
+    font-size: 20px;
+    font-weight: 400;
+    &--blank {min-height: 100vh;}
+}
 
-input {
+.input {
     padding: 4px 12px;
     width: 60px;
     text-align: center;
@@ -37,6 +61,15 @@ input {
     font-size: 16px;
     background-color: #fff;
 }
+.title-calendar {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    background: inherit;
+}
+
+.buttons {margin-top: 10px;}
 .button {
     font-size: 16px;
     padding: 6px 24px;
@@ -68,15 +101,32 @@ input {
         background-color: #fff;
     }
 }
+.btn2 {
+    border: 1px solid #333;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 5px 15px 6px 15px;
+    transition: all .3s ease-in-out;
+    background: inherit;
+    &:hover { 
+        color: #ccc; 
+        background: #000;
+    }
+    &:active { 
+        color: #752d2a;
+        transform: translateY(-5px); 
+    }
+}
 .link {
     font-size: 24px;
     text-decoration: none;
     transition: all .2s ease-in-out;
     color: #000;
     &:hover {color: #0617ce;}
-    &:focus {color: #df0f0f;}
+    &:focus {color: #5d1414;}
     &:active {color: #cd1010;}
 }
+
 .deg-header {margin: 0;}
 .value {margin-left: 10px;}
 .result {
@@ -88,4 +138,13 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.footer {
+    padding: 15px 0;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+}
+.copy {
+    font-size: 12px;   
 }

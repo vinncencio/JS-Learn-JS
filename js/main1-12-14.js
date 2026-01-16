@@ -388,12 +388,12 @@ console.log( formatter2.format(date) ); // 08.07.2025, 15:43
 let animals = ["тигр", "ёж", "енот", "ехидна", "АИСТ", "ЯК"];
 let collator = new Intl.Collator();
 animals.sort((a, b) => collator.compare(a, b))
-console.log( animals ); // (6) ['АИСТ', 'ёж', 'енот', 'ехидна', 'тигр', 'ЯК']
+// console.log( animals ); // (6) ['АИСТ', 'ёж', 'енот', 'ехидна', 'тигр', 'ЯК']
 
 animals = ["тигр", "ёж", "енот", "ехидна", "АИСТ", "ЯК"];
 collator = new Intl.Collator('ru', {usage: 'sort'});
 animals = animals.sort(collator.compare);
-console.log( animals ); // (6) ['АИСТ', 'ёж', 'енот', 'ехидна', 'тигр', 'ЯК']
+// console.log( animals ); // (6) ['АИСТ', 'ёж', 'енот', 'ехидна', 'тигр', 'ЯК']
 
 
 

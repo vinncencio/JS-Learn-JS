@@ -5,7 +5,7 @@
     margin: 0 auto;
     width: 300px;
     align-items: center;
-    border: 1px solid rgb(102, 186, 102);
+    border: 1px solid rgb(34, 64, 34);
     border-radius: 10px;
 }
 .timer-clock {
@@ -21,3 +21,10 @@
     font-size: 24px;
     font-weight: 500;
 }
+.timer2 {
+    text-align: center;
+    font-size: 32px;
+}
+#hour {color: rgb(137, 63, 63);}
+#min {color: rgb(23, 69, 23);}
+#sec {color: rgb(26, 26, 77);}
